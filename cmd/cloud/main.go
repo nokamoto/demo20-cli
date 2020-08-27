@@ -1,3 +1,9 @@
 package main
 
-func main() {}
+import (
+	"github.com/nokamoto/demo20-cli/internal/cmd"
+)
+
+func main() {
+	cmd.Execute()
+}
