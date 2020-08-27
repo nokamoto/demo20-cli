@@ -1,2 +1,2 @@
-# demo20-go-template
-golang template for demo applications
+# demo20-cli
+golang gRPC clients of demo applications
