@@ -1,0 +1,22 @@
+FROM golang:1.15-alpine3.12 as bin
+
+WORKDIR /src
+
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+COPY cmd/cloud cmd/cloud
+COPY cmd/cloud-automated-test cmd/cloud-automated-test
+COPY internal internal
+
+RUN go install ./cmd/cloud
+RUN go install ./cmd/cloud-automated-test
+
+FROM alpine:3.12
+
+COPY --from=bin /go/bin/cloud /usr/local/bin/cloud
+COPY --from=bin /go/bin/cloud-automated-test /usr/local/bin/cloud-automated-test
+
+ENTRYPOINT [ "cloud-automated-test" ]

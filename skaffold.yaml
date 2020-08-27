@@ -1,0 +1,13 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+metadata:
+  name: demo--cli
+build:
+  artifacts:
+  - image: cloud-automated-test
+    docker:
+      dockerfile: Dockerfile.automatedtest
+deploy:
+  kustomize:
+    paths:
+    - deployments/local

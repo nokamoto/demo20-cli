@@ -1,0 +1,16 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cloud-automated-test
+spec:
+  template:
+    spec:
+      containers:
+      - image: cloud-automated-test
+        name: cloud-automated-test
+        env:
+        - name: LOGGER_DEBUG
+          value: "1"
+      restartPolicy: Never
+  backoffLimit: 3
