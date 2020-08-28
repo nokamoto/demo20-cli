@@ -12,5 +12,7 @@ spec:
         env:
         - name: LOGGER_DEBUG
           value: "1"
+        - name: GRPC_ADDRESS
+          value: "compute:9000"
       restartPolicy: Never
   backoffLimit: 3
