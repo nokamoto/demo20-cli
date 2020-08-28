@@ -1,15 +1,19 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/nokamoto/demo20-cli/internal/config"
-	"gopkg.in/yaml.v2"
+	"google.golang.org/protobuf/testing/protocmp"
 
+	"github.com/golang/protobuf/jsonpb"
+	"github.com/google/go-cmp/cmp"
+	"github.com/nokamoto/demo20-apis/cloud/compute/v1alpha"
+	"github.com/nokamoto/demo20-cli/internal/config"
 	"go.uber.org/zap"
+	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -75,6 +79,38 @@ func main() {
 				return state, view(config.Value{
 					GrpcAddress: address,
 				})
+			},
+		},
+		{
+			Name: "compute create",
+			Run: func(state State, logger *zap.Logger) (State, error) {
+				stdout, stderr, err := cloud(logger, "compute", "create", "--labels", "foo")
+				if len(stderr) != 0 {
+					return nil, errors.New(stderr)
+				}
+				if err != nil {
+					return nil, err
+				}
+
+				var actual v1alpha.Instance
+				err = jsonpb.UnmarshalString(stdout, &actual)
+				if err != nil {
+					return nil, err
+				}
+
+				name := actual.GetName()
+				logger.Debug("ignore fields", zap.String("name", name))
+				actual.Name = ""
+
+				expected := v1alpha.Instance{
+					Parent: "projects/todo",
+					Labels: []string{"foo"},
+				}
+				if diff := cmp.Diff(&expected, &actual, protocmp.Transform()); len(diff) != 0 {
+					return nil, fmt.Errorf("diff=%s", diff)
+				}
+
+				return state, nil
 			},
 		},
 	}
