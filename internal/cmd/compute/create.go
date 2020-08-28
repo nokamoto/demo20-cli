@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newCreate(value *config.Value, client *client.Client) *cobra.Command {
+func newCreate(value *config.Value, client client.Client) *cobra.Command {
 	var (
 		labels []string
 	)

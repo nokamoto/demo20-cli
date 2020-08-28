@@ -7,16 +7,20 @@ import (
 )
 
 // Client represents gRPC clients.
-type Client struct {
+type Client interface {
+	Compute() compute.ComputeClient
+}
+
+type client struct {
 	value *config.Value
 }
 
 // NewClient returns Client accesses to the gRPC address.
-func NewClient(value *config.Value) *Client {
-	return &Client{value: value}
+func NewClient(value *config.Value) Client {
+	return &client{value: value}
 }
 
-func (d *Client) con() *grpc.ClientConn {
+func (d *client) con() *grpc.ClientConn {
 	c, err := grpc.Dial(d.value.GrpcAddress, grpc.WithInsecure())
 	if err != nil {
 		panic(err)
@@ -25,6 +29,6 @@ func (d *Client) con() *grpc.ClientConn {
 }
 
 // Compute returns ComputeClient.
-func (d *Client) Compute() compute.ComputeClient {
+func (d *client) Compute() compute.ComputeClient {
 	return compute.NewComputeClient(d.con())
 }
