@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"testing"
 
-	mockcompute "github.com/nokamoto/demo20-cli/internal/test/mock/compute"
-
 	"github.com/golang/mock/gomock"
-
 	"github.com/nokamoto/demo20-cli/internal/client"
 	"github.com/nokamoto/demo20-cli/internal/config"
+	"github.com/nokamoto/demo20-cli/internal/test/mock/iam/mockadmin"
+	"github.com/nokamoto/demo20-cli/internal/test/mock/mockcompute"
 	"github.com/spf13/cobra"
 )
 
@@ -35,6 +34,7 @@ func (xs Cases) Run(t *testing.T) {
 
 			c := MockClient{
 				MockCompute: mockcompute.NewMockComputeClient(ctrl),
+				MockAdmin:   mockadmin.NewMockIamClient(ctrl),
 			}
 
 			if x.Mock == nil {

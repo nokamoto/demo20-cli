@@ -6,7 +6,7 @@ require (
 	github.com/golang/mock v1.3.1
 	github.com/golang/protobuf v1.4.1
 	github.com/google/go-cmp v0.5.0
-	github.com/nokamoto/demo20-apis v0.0.0-20200825082915-b8cca0f1d4de
+	github.com/nokamoto/demo20-apis v0.0.0-20200829023530-267a2aa81f78
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.7.1
 	go.uber.org/zap v1.10.0

@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/nokamoto/demo20-cli/internal/cmd/iam"
+
 	"github.com/nokamoto/demo20-cli/internal/cmd/compute"
 	"github.com/nokamoto/demo20-cli/internal/cmd/config"
 	defaultconfig "github.com/nokamoto/demo20-cli/internal/config"
@@ -30,7 +32,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.AddCommand(config.RootCmd, compute.RootCmd)
+	rootCmd.AddCommand(config.RootCmd, compute.RootCmd, iam.RootCmd)
 
 	rootCmd.SetOut(os.Stdout)
 

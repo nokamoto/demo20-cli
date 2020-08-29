@@ -1,4 +1,4 @@
-package main
+package automatedtest
 
 import (
 	"go.uber.org/zap"
@@ -16,7 +16,8 @@ type State map[string]string
 // Scenarios represents a series of automated test cases.
 type Scenarios []Scenario
 
-func (xs Scenarios) run(logger *zap.Logger) {
+// Run runs Scenarios.
+func (xs Scenarios) Run(logger *zap.Logger) {
 	logger.Info("test start", zap.Int("size", len(xs)))
 	state := make(State)
 

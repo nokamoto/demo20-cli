@@ -1,9 +1,10 @@
-package compute
+package permissions
 
 import (
 	"context"
 
-	"github.com/nokamoto/demo20-apis/cloud/compute/v1alpha"
+	"github.com/nokamoto/demo20-apis/cloud/iam/admin/v1alpha"
+
 	"github.com/nokamoto/demo20-cli/internal/client"
 	"github.com/nokamoto/demo20-cli/internal/config"
 	"github.com/nokamoto/demo20-cli/internal/printer"
@@ -11,31 +12,23 @@ import (
 )
 
 func newCreate(value *config.Value, client client.Client) *cobra.Command {
-	var (
-		labels []string
-	)
-
 	cmd := &cobra.Command{
-		Use:           "create",
-		Short:         "Create a new instance",
-		Args:          cobra.ExactArgs(0),
+		Use:           "create PERMISSION_ID",
+		Short:         "Create a new permission",
+		Args:          cobra.ExactArgs(1),
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			res, err := client.Compute().CreateInstance(context.Background(), &v1alpha.CreateInstanceRequest{
-				Instance: &v1alpha.Instance{
-					Labels: labels,
-				},
+			res, err := client.AdminIam().CreatePermission(context.Background(), &v1alpha.CreatePermissionRequest{
+				PermissionId: args[0],
 			})
 			if err != nil {
 				return err
 			}
+
 			return printer.Proto(cmd, res)
 		},
 	}
-
-	cmd.Flags().StringArrayVar(&labels, "labels", nil, "labels")
-
 	return cmd
 }
 
