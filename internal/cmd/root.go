@@ -4,6 +4,11 @@ import (
 	"log"
 	"os"
 
+	"github.com/nokamoto/demo20-cli/internal/cmd/rdb"
+	"github.com/nokamoto/demo20-cli/internal/cmd/resourcemanager"
+
+	"github.com/nokamoto/demo20-cli/internal/template"
+
 	"github.com/nokamoto/demo20-cli/internal/cmd/iam"
 
 	"github.com/nokamoto/demo20-cli/internal/cmd/compute"
@@ -17,10 +22,7 @@ var (
 	cfgFile string
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "cloud",
-	Short: "A cloud management tool",
-}
+var rootCmd = template.NewRoot("cloud", "A cloud management tool")
 
 // Execute executes the root command.
 func Execute() {
@@ -32,7 +34,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.AddCommand(config.RootCmd, compute.RootCmd, iam.RootCmd)
+	rootCmd.AddCommand(config.RootCmd, compute.RootCmd, iam.RootCmd, resourcemanager.RootCmd, rdb.RootCmd)
 
 	rootCmd.SetOut(os.Stdout)
 

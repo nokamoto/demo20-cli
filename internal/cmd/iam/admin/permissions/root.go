@@ -1,11 +1,8 @@
 package permissions
 
 import (
-	"github.com/spf13/cobra"
+	"github.com/nokamoto/demo20-cli/internal/template"
 )
 
 // RootCmd is a root of v1alpha sub commands.
-var RootCmd = &cobra.Command{
-	Use:   "permissions",
-	Short: "A cloud iam permission management tool",
-}
+var RootCmd = template.NewRoot("permissions", "A cloud iam permission management tool")

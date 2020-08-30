@@ -3,6 +3,8 @@ package permissions
 import (
 	"context"
 
+	"github.com/nokamoto/demo20-cli/internal/template"
+
 	"github.com/nokamoto/demo20-apis/cloud/iam/admin/v1alpha"
 
 	"github.com/nokamoto/demo20-cli/internal/client"
@@ -12,23 +14,17 @@ import (
 )
 
 func newCreate(value *config.Value, client client.Client) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:           "create PERMISSION_ID",
-		Short:         "Create a new permission",
-		Args:          cobra.ExactArgs(1),
-		SilenceUsage:  true,
-		SilenceErrors: true,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			res, err := client.AdminIam().CreatePermission(context.Background(), &v1alpha.CreatePermissionRequest{
-				PermissionId: args[0],
-			})
-			if err != nil {
-				return err
-			}
+	cmd := template.NewArg1("create PERMISSION_ID", "Create a new permission", func(cmd *cobra.Command, arg string) error {
+		res, err := client.AdminIam().CreatePermission(context.Background(), &v1alpha.CreatePermissionRequest{
+			PermissionId: arg,
+		})
+		if err != nil {
+			return err
+		}
 
-			return printer.Proto(cmd, res)
-		},
-	}
+		return printer.Proto(cmd, res)
+	})
+
 	return cmd
 }
 
