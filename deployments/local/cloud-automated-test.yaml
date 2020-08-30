@@ -16,5 +16,9 @@ spec:
           value: "compute:9000"
         - name: IAM_GRPC_ADDRESS
           value: "iam:9001"
+        - name: RDB_GRPC_ADDRESS
+          value: "rdb:9002"
+        - name: RESOURCEMANAGER_GRPC_ADDRESS
+          value: "resourcemanager:9003"
       restartPolicy: Never
   backoffLimit: 3
