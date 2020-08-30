@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/nokamoto/demo20-cli/internal/test/mock/mockrdb"
+	"github.com/nokamoto/demo20-cli/internal/test/mock/mockresourcemanager"
+
 	"github.com/golang/mock/gomock"
 	"github.com/nokamoto/demo20-cli/internal/client"
 	"github.com/nokamoto/demo20-cli/internal/config"
@@ -33,18 +36,13 @@ func (xs Cases) Run(t *testing.T) {
 			defer ctrl.Finish()
 
 			c := MockClient{
-				MockCompute: mockcompute.NewMockComputeClient(ctrl),
-				MockAdmin:   mockadmin.NewMockIamClient(ctrl),
-			}
-
-			if x.Mock == nil {
-				t.Fatal("no mock")
+				MockCompute:         mockcompute.NewMockComputeClient(ctrl),
+				MockAdmin:           mockadmin.NewMockIamClient(ctrl),
+				MockResourceManager: mockresourcemanager.NewMockResourceManagerClient(ctrl),
+				MockRdb:             mockrdb.NewMockRdbClient(ctrl),
 			}
 			x.Mock(&c)
 
-			if x.Cmd == nil {
-				t.Fatal("no command")
-			}
 			cmd := x.Cmd(x.Value, &c)
 
 			var stdout bytes.Buffer
@@ -54,9 +52,6 @@ func (xs Cases) Run(t *testing.T) {
 
 			err := cmd.Execute()
 
-			if x.Check == nil {
-				t.Fatal("no check")
-			}
 			x.Check(t, stdout.String(), err)
 		})
 	}

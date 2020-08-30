@@ -2,14 +2,11 @@ package admin
 
 import (
 	"github.com/nokamoto/demo20-cli/internal/cmd/iam/admin/permissions"
-	"github.com/spf13/cobra"
+	"github.com/nokamoto/demo20-cli/internal/template"
 )
 
 // RootCmd is a root of v1alpha sub commands.
-var RootCmd = &cobra.Command{
-	Use:   "admin",
-	Short: "An iam service management tool for administration",
-}
+var RootCmd = template.NewRoot("admin", "An iam service management tool for administration")
 
 func init() {
 	RootCmd.AddCommand(permissions.RootCmd)
