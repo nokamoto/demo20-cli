@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/nokamoto/demo20-apis/cloud/rdb/v1alpha"
@@ -17,10 +16,7 @@ var rdbScenarios = automatedtest.Scenarios{
 		Run: func(state automatedtest.State, logger *zap.Logger) (automatedtest.State, error) {
 			id := automatedtest.RandomID()
 
-			stdout, stderr, err := automatedtest.Cloud(logger, "rdb", "clusters", "create", id, "--replicas", "1")
-			if len(stderr) != 0 {
-				return nil, errors.New(stderr)
-			}
+			stdout, err := automatedtest.CloudF(logger, "rdb", "clusters", "create", id, "--replicas", "1")
 			if err != nil {
 				return nil, err
 			}
@@ -30,7 +26,7 @@ var rdbScenarios = automatedtest.Scenarios{
 				&v1alpha.Cluster{
 					Name:     fmt.Sprintf("clusters/%s", id),
 					Replicas: 1,
-					Parent:   "projects/todo",
+					Parent:   fmt.Sprintf("projects/%s", state[testProjectIDState]),
 				},
 				&v1alpha.Cluster{},
 				protocmp.IgnoreFields(&v1alpha.Cluster{}, "instances"),

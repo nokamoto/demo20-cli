@@ -4,13 +4,10 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/proto"
-
-	"github.com/nokamoto/demo20-cli/internal/template"
-
 	"github.com/nokamoto/demo20-apis/cloud/iam/admin/v1alpha"
-
 	"github.com/nokamoto/demo20-cli/internal/client"
 	"github.com/nokamoto/demo20-cli/internal/config"
+	"github.com/nokamoto/demo20-cli/internal/template"
 	"github.com/spf13/cobra"
 )
 

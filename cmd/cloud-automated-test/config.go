@@ -12,14 +12,23 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func configView(logger *zap.Logger, expected config.Value) error {
-	stdout, stderr, err := automatedtest.Cloud(logger, "config", "view")
+func currentConfig(logger *zap.Logger) (config.Value, error) {
+	var actual config.Value
+	stdout, err := automatedtest.CloudF(logger, "config", "view")
 	if err != nil {
-		return err
+		return actual, err
 	}
 
-	var actual config.Value
 	err = yaml.Unmarshal([]byte(stdout), &actual)
+	if err != nil {
+		return actual, err
+	}
+
+	return actual, nil
+}
+
+func configView(logger *zap.Logger, expected config.Value) error {
+	actual, err := currentConfig(logger)
 	if err != nil {
 		return err
 	}
@@ -28,26 +37,27 @@ func configView(logger *zap.Logger, expected config.Value) error {
 		return fmt.Errorf("unexpected configuration: %s", diff)
 	}
 
-	if len(stderr) != 0 {
-		return fmt.Errorf("expected no stderr: %s", stderr)
-	}
-
 	return nil
 }
 
 func configSet(env string) automatedtest.Scenario {
 	return automatedtest.Scenario{
-		Name: "config set",
+		Name: fmt.Sprintf("config set --grpc-address $%s", env),
 		Run: func(state automatedtest.State, logger *zap.Logger) (automatedtest.State, error) {
-			address := os.Getenv(env)
-			_, _, err := automatedtest.Cloud(logger, "config", "set", "--grpc-address", address)
+			expected, err := currentConfig(logger)
 			if err != nil {
 				return nil, err
 			}
 
-			return state, configView(logger, config.Value{
-				GrpcAddress: address,
-			})
+			address := os.Getenv(env)
+			_, err = automatedtest.CloudF(logger, "config", "set", "--grpc-address", address)
+			if err != nil {
+				return nil, err
+			}
+
+			expected.GrpcAddress = address
+
+			return state, configView(logger, expected)
 		},
 	}
 }

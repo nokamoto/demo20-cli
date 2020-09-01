@@ -4,16 +4,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/nokamoto/demo20-cli/internal/cmd/rdb"
-	"github.com/nokamoto/demo20-cli/internal/cmd/resourcemanager"
-
-	"github.com/nokamoto/demo20-cli/internal/template"
-
-	"github.com/nokamoto/demo20-cli/internal/cmd/iam"
-
 	"github.com/nokamoto/demo20-cli/internal/cmd/compute"
 	"github.com/nokamoto/demo20-cli/internal/cmd/config"
+	"github.com/nokamoto/demo20-cli/internal/cmd/iam"
+	"github.com/nokamoto/demo20-cli/internal/cmd/rdb"
+	"github.com/nokamoto/demo20-cli/internal/cmd/resourcemanager"
 	defaultconfig "github.com/nokamoto/demo20-cli/internal/config"
+	"github.com/nokamoto/demo20-cli/internal/template"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -42,6 +39,12 @@ func init() {
 
 	rootCmd.PersistentFlags().String("grpc-address", "localhost:9000", "gRPC server address")
 	viper.BindPFlag("grpcaddress", rootCmd.PersistentFlags().Lookup("grpc-address"))
+
+	rootCmd.PersistentFlags().String("project-id", "", "project id")
+	viper.BindPFlag("projectid", rootCmd.PersistentFlags().Lookup("project-id"))
+
+	rootCmd.PersistentFlags().String("machine-user-api-key", "", "machine user api key")
+	viper.BindPFlag("machineuserapikey", rootCmd.PersistentFlags().Lookup("machine-user-api-key"))
 }
 
 func initConfig() {
