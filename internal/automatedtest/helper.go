@@ -30,6 +30,15 @@ func Cloud(logger *zap.Logger, args ...string) (string, string, error) {
 	return so, se, err
 }
 
+// CloudF executes the cloud command expected no stderr.
+func CloudF(logger *zap.Logger, args ...string) (string, error) {
+	stdout, stderr, err := Cloud(logger, args...)
+	if len(stderr) != 0 {
+		return "", fmt.Errorf("unexpected stderr: %s: %w", stderr, err)
+	}
+	return stdout, err
+}
+
 // Diff asserts that the standard output is the expected proto message.
 func Diff(stdout string, expected proto.Message, actual proto.Message, opts ...cmp.Option) error {
 	err := jsonpb.UnmarshalString(stdout, actual)

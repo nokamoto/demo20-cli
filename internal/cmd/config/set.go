@@ -5,20 +5,27 @@ import (
 	"os"
 	"path"
 
-	"github.com/nokamoto/demo20-cli/internal/template"
-
 	"github.com/nokamoto/demo20-cli/internal/config"
+	"github.com/nokamoto/demo20-cli/internal/template"
 	"github.com/spf13/cobra"
 )
 
 func newSet(value *config.Value) *cobra.Command {
 	var (
-		grpcAddress string
+		grpcAddress       string
+		projectID         string
+		machineUserAPIKey string
 	)
 
 	cmd := template.NewArg0("set", "Set configration values to the default configration file", func(cmd *cobra.Command) error {
 		if cmd.Flags().Changed("grpc-address") {
 			value.GrpcAddress = grpcAddress
+		}
+		if cmd.Flags().Changed("project-id") {
+			value.ProjectID = projectID
+		}
+		if cmd.Flags().Changed("machine-user-api-key") {
+			value.MachineUserAPIKey = machineUserAPIKey
 		}
 
 		home, err := os.UserHomeDir()
@@ -38,6 +45,8 @@ func newSet(value *config.Value) *cobra.Command {
 	})
 
 	cmd.Flags().StringVar(&grpcAddress, "grpc-address", "", "gRPC server address")
+	cmd.Flags().StringVar(&projectID, "project-id", "", "project id")
+	cmd.Flags().StringVar(&machineUserAPIKey, "machine-user-api-key", "", "machine user api key")
 
 	return cmd
 }

@@ -36,8 +36,9 @@ func main() {
 
 	var xs automatedtest.Scenarios
 	xs = append(xs, configScenarios...)
-	xs = append(xs, computeScenarios...)
+	xs = append(xs, resourcemanagerScenarios...)
 	xs = append(xs, iamScenarios...)
+	xs = append(xs, computeScenarios...)
 	xs = append(xs, rdbScenarios...)
 	xs.Run(logger)
 }

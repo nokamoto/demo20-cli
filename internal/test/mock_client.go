@@ -3,9 +3,11 @@ package test
 import (
 	compute "github.com/nokamoto/demo20-apis/cloud/compute/v1alpha"
 	admin "github.com/nokamoto/demo20-apis/cloud/iam/admin/v1alpha"
+	iam "github.com/nokamoto/demo20-apis/cloud/iam/v1alpha"
 	rdb "github.com/nokamoto/demo20-apis/cloud/rdb/v1alpha"
 	resourcemanager "github.com/nokamoto/demo20-apis/cloud/resourcemanager/v1alpha"
 	"github.com/nokamoto/demo20-cli/internal/test/mock/iam/mockadmin"
+	"github.com/nokamoto/demo20-cli/internal/test/mock/iam/mockiam"
 	"github.com/nokamoto/demo20-cli/internal/test/mock/mockcompute"
 	"github.com/nokamoto/demo20-cli/internal/test/mock/mockrdb"
 	"github.com/nokamoto/demo20-cli/internal/test/mock/mockresourcemanager"
@@ -15,6 +17,7 @@ import (
 type MockClient struct {
 	MockCompute         *mockcompute.MockComputeClient
 	MockAdmin           *mockadmin.MockIamClient
+	MockIam             *mockiam.MockIamClient
 	MockResourceManager *mockresourcemanager.MockResourceManagerClient
 	MockRdb             *mockrdb.MockRdbClient
 }
@@ -27,6 +30,11 @@ func (c *MockClient) Compute() compute.ComputeClient {
 // AdminIam returns a mocked iam admin client.
 func (c *MockClient) AdminIam() admin.IamClient {
 	return c.MockAdmin
+}
+
+// Iam returns a mocked iam client.
+func (c *MockClient) Iam() iam.IamClient {
+	return c.MockIam
 }
 
 // ResourceManager returns a mocked resourcemanager client.

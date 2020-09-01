@@ -2,6 +2,8 @@ package admin
 
 import (
 	"github.com/nokamoto/demo20-cli/internal/cmd/iam/admin/permissions"
+	"github.com/nokamoto/demo20-cli/internal/cmd/iam/admin/rolebindings"
+	"github.com/nokamoto/demo20-cli/internal/cmd/iam/admin/roles"
 	"github.com/nokamoto/demo20-cli/internal/template"
 )
 
@@ -9,5 +11,5 @@ import (
 var RootCmd = template.NewRoot("admin", "An iam service management tool for administration")
 
 func init() {
-	RootCmd.AddCommand(permissions.RootCmd)
+	RootCmd.AddCommand(permissions.RootCmd, roles.RootCmd, rolebindings.RootCmd)
 }

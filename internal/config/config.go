@@ -1,8 +1,12 @@
 package config
 
 import (
+	"context"
+	"fmt"
 	"io/ioutil"
 
+	"github.com/nokamoto/demo20-apis/cloud/api"
+	"github.com/nokamoto/demo20-apps/pkg/sdk/metadata"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,7 +19,9 @@ const (
 
 // Value represetns a commandline configuration.
 type Value struct {
-	GrpcAddress string `yaml:"grpcAddress"`
+	GrpcAddress       string `yaml:"grpcAddress"`
+	ProjectID         string `yaml:"projectID"`
+	MachineUserAPIKey string `yaml:"machineUserAPIKey"`
 }
 
 var (
@@ -36,4 +42,18 @@ func (v Value) Write(filename string) error {
 		return err
 	}
 	return ioutil.WriteFile(filename, bytes, 0644)
+}
+
+// OutgoingContext returns a new outgoing context.
+func (v Value) OutgoingContext() context.Context {
+	ctx, err := metadata.AppendToOutgoingContext(context.Background(), &api.Metadata{
+		Credential: &api.Metadata_MachineUserApiKey{
+			MachineUserApiKey: v.MachineUserAPIKey,
+		},
+		Parent: fmt.Sprintf("projects/%s", v.ProjectID),
+	})
+	if err != nil {
+		panic(err)
+	}
+	return ctx
 }

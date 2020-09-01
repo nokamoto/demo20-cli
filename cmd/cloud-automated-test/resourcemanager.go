@@ -1,11 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/golang/protobuf/jsonpb"
-
 	"github.com/nokamoto/demo20-apis/cloud/resourcemanager/v1alpha"
 	"github.com/nokamoto/demo20-cli/internal/automatedtest"
 	"go.uber.org/zap"
@@ -19,15 +17,12 @@ var resourcemanagerScenarios = automatedtest.Scenarios{
 			id := automatedtest.RandomID()
 			displayName := fmt.Sprintf("test %s display name", id)
 
-			stdout, stderr, err := automatedtest.Cloud(logger, "resourcemanager", "projects", "create", id, "--display-name", displayName)
-			if len(stderr) != 0 {
-				return nil, errors.New(stderr)
-			}
+			stdout, err := automatedtest.CloudF(logger, "resourcemanager", "projects", "create", id, "--display-name", displayName)
 			if err != nil {
 				return nil, err
 			}
 
-			state["project-id"] = id
+			state[testProjectIDState] = id
 			state["project"] = stdout
 
 			return state, automatedtest.Diff(
@@ -41,6 +36,24 @@ var resourcemanagerScenarios = automatedtest.Scenarios{
 		},
 	},
 	{
+		Name: "config set --project-id",
+		Run: func(state automatedtest.State, logger *zap.Logger) (automatedtest.State, error) {
+			expected, err := currentConfig(logger)
+			if err != nil {
+				return nil, err
+			}
+
+			expected.ProjectID = state[testProjectIDState]
+
+			_, err = automatedtest.CloudF(logger, "config", "set", "--project-id", expected.ProjectID)
+			if err != nil {
+				return nil, err
+			}
+
+			return state, configView(logger, expected)
+		},
+	},
+	{
 		Name: "resourcemanager projects get",
 		Run: func(state automatedtest.State, logger *zap.Logger) (automatedtest.State, error) {
 			var expected v1alpha.Project
@@ -49,10 +62,7 @@ var resourcemanagerScenarios = automatedtest.Scenarios{
 				return nil, err
 			}
 
-			stdout, stderr, err := automatedtest.Cloud(logger, "resourcemanager", "projects", "get", state["project-id"])
-			if len(stderr) != 0 {
-				return nil, errors.New(stderr)
-			}
+			stdout, err := automatedtest.CloudF(logger, "resourcemanager", "projects", "get", state[testProjectIDState])
 			if err != nil {
 				return nil, err
 			}
