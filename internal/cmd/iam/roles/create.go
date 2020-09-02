@@ -15,7 +15,7 @@ func NewCreate(f func(string, string, []string) (proto.Message, error)) *cobra.C
 		permissionIDs []string
 	)
 
-	cmd := template.NewArg1Proto("create ROLE_ID", "Creates a new role", func(cmd *cobra.Command, arg string) (proto.Message, error) {
+	cmd := template.NewArg1Proto("create ROLE_ID", "Create a new role", func(cmd *cobra.Command, arg string) (proto.Message, error) {
 		var names []string
 		for _, p := range permissionIDs {
 			names = append(names, fmt.Sprintf("permissions/%s", p))

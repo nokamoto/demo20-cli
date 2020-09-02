@@ -12,7 +12,7 @@ func NewCreate(f func(string) (proto.Message, error)) *cobra.Command {
 		displayName string
 	)
 
-	cmd := template.NewArg0Proto("create", "Creates a new machine user", func(cmd *cobra.Command) (proto.Message, error) {
+	cmd := template.NewArg0Proto("create", "Create a new machine user", func(cmd *cobra.Command) (proto.Message, error) {
 		return f(displayName)
 	})
 
