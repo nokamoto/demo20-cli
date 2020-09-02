@@ -17,7 +17,6 @@ func Test_newGet(t *testing.T) {
 			Name: "OK",
 			Args: test.Args("foo"),
 			Value: &config.Value{
-				ProjectID:         "test",
 				MachineUserAPIKey: "mu",
 			},
 			Cmd: newGet,
@@ -27,7 +26,7 @@ func Test_newGet(t *testing.T) {
 						Credential: &api.Metadata_MachineUserApiKey{
 							MachineUserApiKey: "mu",
 						},
-						Parent: "projects/test",
+						Parent: "projects/foo",
 					}),
 					&v1alpha.GetProjectRequest{}).Return(&v1alpha.Project{
 					Name:        "projects/foo",
