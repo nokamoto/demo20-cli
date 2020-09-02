@@ -13,7 +13,7 @@ func NewAdd(f func(string, string) (proto.Message, error)) *cobra.Command {
 		user string
 	)
 
-	cmd := template.NewArg0Proto("add", "Adds a new role binding", func(cmd *cobra.Command) (proto.Message, error) {
+	cmd := template.NewArg0Proto("add", "Add a new role binding", func(cmd *cobra.Command) (proto.Message, error) {
 		return f(role, user)
 	})
 

@@ -12,7 +12,7 @@ func NewCanI(f func(string) (proto.Message, error)) *cobra.Command {
 		permissionID string
 	)
 
-	cmd := template.NewArg0Proto("can-i", "Checks whether I can do an action", func(cmd *cobra.Command) (proto.Message, error) {
+	cmd := template.NewArg0Proto("can-i", "Check whether I can do an action", func(cmd *cobra.Command) (proto.Message, error) {
 		return f(permissionID)
 	})
 

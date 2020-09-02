@@ -31,7 +31,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.AddCommand(config.RootCmd, compute.RootCmd, iam.RootCmd, resourcemanager.RootCmd, rdb.RootCmd)
+	rootCmd.AddCommand(config.RootCmd, compute.RootCmd, iam.RootCmd, resourcemanager.RootCmd, rdb.RootCmd, completionCmd)
 
 	rootCmd.SetOut(os.Stdout)
 
