@@ -37,7 +37,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cloud.yaml)")
 
-	rootCmd.PersistentFlags().String("grpc-address", "localhost:9000", "gRPC server address")
+	rootCmd.PersistentFlags().String("grpc-address", "localhost:10000", "gRPC server address")
 	viper.BindPFlag("grpcaddress", rootCmd.PersistentFlags().Lookup("grpc-address"))
 
 	rootCmd.PersistentFlags().String("project-id", "", "project id")

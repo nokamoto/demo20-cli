@@ -67,7 +67,7 @@ var configScenarios = automatedtest.Scenarios{
 		Name: "config view - initial",
 		Run: func(state automatedtest.State, logger *zap.Logger) (automatedtest.State, error) {
 			return state, configView(logger, config.Value{
-				GrpcAddress: "localhost:9000",
+				GrpcAddress: "localhost:10000",
 			})
 		},
 	},
