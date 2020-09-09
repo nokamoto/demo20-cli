@@ -66,3 +66,19 @@ jobs:
           docker build . --file Dockerfile.releasetest --tag $IMAGE_NAME --build-arg version=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+  commit:
+    name: Commit 
+    needs: push
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    steps:
+    - run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        VALUES=cliautomatedtest.tag=${VERSION}
+        docker run \
+          -e VALUES=${VALUES}\
+          -e VALUES_FILE=apps/values.yaml\
+          -e GIT_MESSAGE="Update ${VERSION}"\
+          -e GH_PAT=${{ secrets.CR_PAT }}\
+          ghcr.io/nokamoto/demo20-gitops-plugin:891468607c8cc5fd848cd0766897f0d3157e061c
